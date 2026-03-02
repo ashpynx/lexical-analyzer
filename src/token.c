@@ -41,8 +41,6 @@ Token next_token( Lexer * lex)
     
     Token temp;
 
-    
-
 
     return temp;
 }

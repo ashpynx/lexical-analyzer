@@ -23,8 +23,10 @@ main(int argc
     TokenArray  arr;
 
     Lexer * lex = init_lexer(buffer);
+    
+    struct word hi=next_word(lex->head);
 
-     
+    printf("%.*s\n",hi.length,hi.head);
 
     printf("%s",lex->head);
 

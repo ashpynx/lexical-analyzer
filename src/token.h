@@ -8,6 +8,12 @@
 extern const char * keywords[];
 
 
+struct word 
+{
+    const char * head;
+    int length;
+};
+
 typedef enum 
 {
     
