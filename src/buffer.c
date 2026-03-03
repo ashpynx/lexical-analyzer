@@ -47,12 +47,14 @@ next_word(Lexer * lex)
     const char * buf = lex->curr;
     int len=0;
     int i=0;
+    int negi=0;
     while(buf[i]==' ' || buf[i] == '\n' || buf[i] =='\t')
     {
         if(buf[i]=='\n')
         {
             lex->line++;
             lex->position=0;
+            negi=i+1;
         }
         i++;
     }
@@ -60,7 +62,7 @@ next_word(Lexer * lex)
         len++;
     
     lex->curr = lex->curr + i +len;
-    lex->position += i+len; 
+    lex->position += i-negi+len; 
     return (struct word){buf+i,len};
 }
 

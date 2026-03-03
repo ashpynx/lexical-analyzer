@@ -23,12 +23,14 @@ main(int argc
     TokenArray  arr;
 
     Lexer * lex = init_lexer(buffer);
-    
-    struct word hi=next_word(lex);
+    for (int i=0; i<3;i++)
+    {
+        Token newtoken = next_token(lex);
 
-    struct word hi2=next_word(lex);
-    printf("%.*s\n",hi.length,hi.head);
+        if(newtoken.type == __KEYWORD)
+        {
+            printf("Keyword found at line %d , position %d:%.*s\n",newtoken.line,newtoken.position,newtoken.length,newtoken.head);
 
-    printf("%.*s\n",hi2.length,hi2.head);
-
+        }
+    }
 }

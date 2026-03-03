@@ -46,7 +46,15 @@ next_token( Lexer * lex)
 
     struct word nw  = next_word(lex);    
 
-     
+    if(is_keyword(&nw))
+    {
+        temp.head = nw.head ;
+        temp.length = nw.length;
+        temp.type = __KEYWORD;
+        temp.line = lex->line;
+        temp.position = lex->position - temp.length;
+
+    }
 
     return temp;
 }
