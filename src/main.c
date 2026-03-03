@@ -24,10 +24,11 @@ main(int argc
 
     Lexer * lex = init_lexer(buffer);
     
-    struct word hi=next_word(lex->head);
+    struct word hi=next_word(lex);
 
+    struct word hi2=next_word(lex);
     printf("%.*s\n",hi.length,hi.head);
 
-    printf("%s",lex->head);
+    printf("%.*s\n",hi2.length,hi2.head);
 
 }

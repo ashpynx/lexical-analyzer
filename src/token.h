@@ -65,10 +65,16 @@ typedef struct
 }Lexer;
 
 
-Lexer * init_lexer(const char * source);
+Lexer *
+init_lexer(const char * source);
 
-Token next_token(Lexer * );
+Token 
+next_token(Lexer * );
 
-TokenArray* push_token(TokenArray* array);
+TokenArray* 
+push_token(TokenArray* array);
+
+int 
+is_keyword(struct word * w);
 
 #endif

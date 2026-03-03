@@ -41,18 +41,26 @@ read_file(char * filename)
 }
 
 struct word
-next_word(const char* buf)
+next_word(Lexer * lex)
 
 {
+    const char * buf = lex->curr;
     int len=0;
     int i=0;
     while(buf[i]==' ' || buf[i] == '\n' || buf[i] =='\t')
+    {
+        if(buf[i]=='\n')
+        {
+            lex->line++;
+            lex->position=0;
+        }
         i++;
-
+    }
     while(buf[i+len] != '\0' && (buf[i+len]!='\n' && buf[i+len]!=' ' && buf[i+len]!='\t'))       
         len++;
     
-    
+    lex->curr = lex->curr + i +len;
+    lex->position += i+len; 
     return (struct word){buf+i,len};
 }
 

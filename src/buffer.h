@@ -6,6 +6,6 @@ char *
 read_file(char * fname);
 
 struct word
-next_word(const char * buf);
+next_word(Lexer * lex);
 
 #endif
