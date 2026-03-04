@@ -35,12 +35,21 @@ main(int argc
         }
         
         tokarr = push_token(tokarr,temp);
-
-        if(temp.type ==__KEYWORD)
+    }
+    for(int i=0;i<tokarr->length;i++)
+    {
+        Token temp1=tokarr->arr[i]; 
+        if(temp1.type ==__KEYWORD)
         {
-            printf("Keyword found at line %d , position %d:%.*s\n",temp.line,temp.position,temp.length,temp.head);
+            printf("Keyword found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
+        }else if (temp1.type == __SYMBOL)
+        {
+            printf("Symbol found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
+        }
+        else 
+        {
+            printf("Unidentifiable token found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
         }
     }
-
 
 }

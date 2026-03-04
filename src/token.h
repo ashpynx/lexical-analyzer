@@ -7,6 +7,7 @@
 
 extern const char * keywords[];
 
+extern const char symbols[];
 
 struct word 
 {
@@ -29,7 +30,8 @@ typedef enum
     __KEYWORD,
     __ID,
     __VALUE,
-
+    __SYMBOL,
+    __UNID,
 }TokenType;
 
 
@@ -87,8 +89,12 @@ push_token(TokenArray* array,Token tok);
 TokenArray* 
 init_tokenarray();
 
-
 int 
 is_keyword(struct word * w);
+
+int 
+is_symbol(struct word * w);
+
+
 
 #endif

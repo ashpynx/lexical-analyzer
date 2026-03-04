@@ -2,6 +2,9 @@
 #include "buffer.h"
 const char * keywords[] = {"IF","INT","FLOAT","WHILE","FUNC"};
 
+const char symbols[] = {'+','-','/','*','(',')','[',']','{','}'};
+
+
 
 Lexer * 
 init_lexer(const char * source)
@@ -22,7 +25,7 @@ push_token(TokenArray* array,Token tok)
 {
     if(array->length == array->capacity)
     {
-        array->arr = (Token *)realloc(array->arr,array->capacity*2);
+        array->arr = realloc(array->arr,(array->capacity)*sizeof(Token)*2);
         if(array->arr == NULL)
         {
             fprintf(stderr,"Couldn't allocate more for Token Array!\nExiting...");
@@ -31,11 +34,11 @@ push_token(TokenArray* array,Token tok)
         
         array->capacity *=2;
 
-
     }
 
     array->arr[array->length] = tok;
-
+    
+    array->length++;
     return array;
 }
 
@@ -45,7 +48,6 @@ next_token( Lexer * lex)
 {
     
     Token temp;
-
     struct word nw  = next_word(lex);    
     if(nw.head ==NULL)
     {
@@ -59,6 +61,24 @@ next_token( Lexer * lex)
         temp.type = __KEYWORD;
         temp.line = lex->line;
         temp.position = lex->position - temp.length;
+
+    }
+    else if(is_symbol(&nw))
+    {
+        temp.head = nw.head ;
+        temp.length = 1;
+        temp.type = __SYMBOL;
+        temp.line = lex->line;
+        temp.position = lex->position - 1;
+    }
+    else 
+    {
+
+        temp.length =nw.length;
+        temp.head = nw.head;
+        temp.line =lex->line;
+        temp.position = lex->position;
+        temp.type = __UNID;
 
     }
 
@@ -106,4 +126,22 @@ init_tokenarray()
     temp->length = 0;
 
     return temp;
+}
+
+int
+is_symbol(struct word *w)
+{
+    if(w->length !=1)
+        return 0;
+
+    int len = sizeof(symbols)/sizeof(char);
+
+    for(int i=0;i<len;i++)
+    {
+        if(*(w->head) == symbols[i])
+        {
+            return 1;
+        }
+    }
+    return 0;
 }

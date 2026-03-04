@@ -1,7 +1,8 @@
-FUNC 
-    INT
-    FLOAT
-    WHILE
+FUNC +
+    INT { }
+    FLOAT / / 
+    WHILE //
+    - --
         IF
             FLOAT
 
