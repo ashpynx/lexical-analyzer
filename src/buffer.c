@@ -48,7 +48,7 @@ next_word(Lexer * lex)
     int len=0;
     int i=0;
     int negi=0;
-    while(buf[i]==' ' || buf[i] == '\n' || buf[i] =='\t')
+    while(buf[i]==' ' || buf[i] == '\n' || buf[i] =='\t' || buf[i] == '\0')
     {
         if(buf[i]=='\n')
         {
@@ -56,11 +56,15 @@ next_word(Lexer * lex)
             lex->position=0;
             negi=i+1;
         }
+        if(buf[i]=='\0')
+        {
+            return (struct word){NULL,0};
+        }
         i++;
     }
     while(buf[i+len] != '\0' && (buf[i+len]!='\n' && buf[i+len]!=' ' && buf[i+len]!='\t'))       
         len++;
-    
+     
     lex->curr = lex->curr + i +len;
     lex->position += i-negi+len; 
     return (struct word){buf+i,len};

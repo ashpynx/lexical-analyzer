@@ -20,17 +20,27 @@ main(int argc
     
     buffer = read_file(argv[1]);
 
-    TokenArray  arr;
-
     Lexer * lex = init_lexer(buffer);
-    for (int i=0; i<3;i++)
+    
+    TokenArray * tokarr = init_tokenarray();
+    
+    Token temp;
+    while(1)
     {
-        Token newtoken = next_token(lex);
+        temp = next_token(lex);
 
-        if(newtoken.type == __KEYWORD)
+        if(lex->state == __EOF)
         {
-            printf("Keyword found at line %d , position %d:%.*s\n",newtoken.line,newtoken.position,newtoken.length,newtoken.head);
+            break;
+        }
+        
+        tokarr = push_token(tokarr,temp);
 
+        if(temp.type ==__KEYWORD)
+        {
+            printf("Keyword found at line %d , position %d:%.*s\n",temp.line,temp.position,temp.length,temp.head);
         }
     }
+
+
 }

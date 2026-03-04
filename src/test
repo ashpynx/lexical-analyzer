@@ -1,3 +1,7 @@
-IF               
-  INT  
-FLOAT
+FUNC 
+    INT
+    FLOAT
+    WHILE
+        IF
+            FLOAT
+

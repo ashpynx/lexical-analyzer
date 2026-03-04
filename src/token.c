@@ -1,6 +1,7 @@
 #include "token.h"
 #include "buffer.h"
-const char * keywords[] = {"IF","INT","FLOAT"};
+const char * keywords[] = {"IF","INT","FLOAT","WHILE","FUNC"};
+
 
 Lexer * 
 init_lexer(const char * source)
@@ -17,14 +18,14 @@ init_lexer(const char * source)
 }
 
 TokenArray* 
-push_token(TokenArray* array)
+push_token(TokenArray* array,Token tok)
 {
     if(array->length == array->capacity)
     {
         array->arr = (Token *)realloc(array->arr,array->capacity*2);
         if(array->arr == NULL)
         {
-            fprintf(stderr,"Could'n allocate more for Token Array!\nExiting...");
+            fprintf(stderr,"Couldn't allocate more for Token Array!\nExiting...");
             exit(74);
         }
         
@@ -33,6 +34,7 @@ push_token(TokenArray* array)
 
     }
 
+    array->arr[array->length] = tok;
 
     return array;
 }
@@ -45,7 +47,11 @@ next_token( Lexer * lex)
     Token temp;
 
     struct word nw  = next_word(lex);    
-
+    if(nw.head ==NULL)
+    {
+        lex->state = __EOF;
+        return temp;
+    }
     if(is_keyword(&nw))
     {
         temp.head = nw.head ;
@@ -84,4 +90,20 @@ is_keyword(struct word *w)
         }
     }
     return 0;
+}
+
+
+
+
+TokenArray*
+init_tokenarray()
+{
+    TokenArray * temp = (TokenArray*)malloc(sizeof(TokenArray));
+
+    temp->arr = (Token*)malloc(sizeof(Token));
+
+    temp->capacity =1;
+    temp->length = 0;
+
+    return temp;
 }

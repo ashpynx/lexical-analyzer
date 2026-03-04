@@ -17,6 +17,15 @@ struct word
 typedef enum 
 {
     
+    __Available,
+    __EOF
+
+}LexerState;
+
+
+typedef enum 
+{
+    
     __KEYWORD,
     __ID,
     __VALUE,
@@ -61,6 +70,7 @@ typedef struct
 
     int position;
 
+    LexerState state;
 
 }Lexer;
 
@@ -72,7 +82,11 @@ Token
 next_token(Lexer * );
 
 TokenArray* 
-push_token(TokenArray* array);
+push_token(TokenArray* array,Token tok);
+
+TokenArray* 
+init_tokenarray();
+
 
 int 
 is_keyword(struct word * w);
