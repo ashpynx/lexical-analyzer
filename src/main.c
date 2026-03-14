@@ -46,10 +46,25 @@ main(int argc
         {
             printf("Symbol found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
         }
+        else if(temp1.type == __LVALUE)
+        {
+
+            printf("Value found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
+
+        }
+        else if (temp1.type == __ID)
+        {
+
+            printf("Identifier found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
+        }
         else 
         {
             printf("Unidentifiable token found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
         }
     }
-
+    free(buffer);
+    free(lex);
+    free(tokarr->arr);
+    free(tokarr);
+    return 0;
 }

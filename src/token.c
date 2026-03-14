@@ -1,13 +1,13 @@
 #include "token.h"
 #include "buffer.h"
-const char * keywords[] = {"IF","INT","FLOAT","WHILE","FUNC"};
+const char * keywords[] = {"IF","INT","FLOAT","WHILE","FUNC","END"};
 
-const char symbols[] = {'+','-','/','*','(',')','[',']','{','}'};
+const char symbols[] = {'+','=','-','/','*','(',')','[',']','{','}'};
 
 
 
 Lexer * 
-init_lexer(const char * source)
+init_lexer(char * source)
 {
 
     Lexer *newLexer = (Lexer*)malloc(sizeof(Lexer));
@@ -49,11 +49,16 @@ next_token( Lexer * lex)
     
     Token temp;
     struct word nw  = next_word(lex);    
+
+
+
     if(nw.head ==NULL)
     {
         lex->state = __EOF;
         return temp;
     }
+
+
     if(is_keyword(&nw))
     {
         temp.head = nw.head ;
@@ -71,13 +76,30 @@ next_token( Lexer * lex)
         temp.line = lex->line;
         temp.position = lex->position - 1;
     }
+    else if(is_lvalue(&nw))
+    {
+        temp.head = nw.head;
+        temp.length=nw.length;
+        temp.type=__LVALUE;
+        temp.line=lex->line;
+        temp.position = lex->position - temp.length;
+
+    }
+    else if(is_identifier(&nw))
+    {
+        temp.head = nw.head;
+        temp.length = nw.length;
+        temp.type = __ID;
+        temp.line = lex->line;
+        temp.position = lex->position-nw.length;
+    }
     else 
     {
 
         temp.length =nw.length;
         temp.head = nw.head;
         temp.line =lex->line;
-        temp.position = lex->position;
+        temp.position = lex->position - nw.length;
         temp.type = __UNID;
 
     }
@@ -144,4 +166,49 @@ is_symbol(struct word *w)
         }
     }
     return 0;
+}
+
+int 
+is_identifier(struct word * w)
+{
+    struct word temp = *w;
+
+    temp.length =1;
+    for(int i=0; i < w->length; i++)
+    {
+        temp.head++;
+        if(is_symbol(&temp))
+            return 0;
+
+    }
+    
+    return 1;
+}
+
+int
+is_lvalue(struct word * w)
+{
+    int val=1;
+    if(w->head[0]=='0')
+    {
+        if(w->length!=1)
+        {
+            val=0;
+
+            goto chr;
+        }
+    }
+    for(int i=0 ; i< w->length;i++)
+    {
+        if(!(w->head[i] - '0' >= 0 && w->head[i] - '0' <=9))
+        {
+            val=0;
+            break;
+        }
+    }
+    
+    chr:
+
+
+    return val;
 }

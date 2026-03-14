@@ -29,7 +29,7 @@ typedef enum
     
     __KEYWORD,
     __ID,
-    __VALUE,
+    __LVALUE,
     __SYMBOL,
     __UNID,
 }TokenType;
@@ -78,7 +78,7 @@ typedef struct
 
 
 Lexer *
-init_lexer(const char * source);
+init_lexer(char * source);
 
 Token 
 next_token(Lexer * );
@@ -95,6 +95,10 @@ is_keyword(struct word * w);
 int 
 is_symbol(struct word * w);
 
+int
+is_identifier(struct word * w);
 
+int 
+is_lvalue(struct word * w);
 
 #endif
