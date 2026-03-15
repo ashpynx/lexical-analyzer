@@ -5,9 +5,12 @@
 
 #include <stdio.h>
 
+#include <string.h>
+
+
 extern const char * keywords[];
 
-extern const char symbols[];
+extern const char* symbols[];
 
 struct word 
 {

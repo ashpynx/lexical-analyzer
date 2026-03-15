@@ -2,7 +2,8 @@
 #include "buffer.h"
 const char * keywords[] = {"IF","INT","FLOAT","WHILE","FUNC","END"};
 
-const char symbols[] = {'+','=','-','/','*','(',')','[',']','{','}'};
+const char *symbols[] = {"+","-","!=","==","=",">","<","/","*","(",")","[","]","{","}"};
+
 
 
 
@@ -71,7 +72,7 @@ next_token( Lexer * lex)
     else if(is_symbol(&nw))
     {
         temp.head = nw.head ;
-        temp.length = 1;
+        temp.length = nw.length;
         temp.type = __SYMBOL;
         temp.line = lex->line;
         temp.position = lex->position - 1;
@@ -153,17 +154,33 @@ init_tokenarray()
 int
 is_symbol(struct word *w)
 {
-    if(w->length !=1)
-        return 0;
 
-    int len = sizeof(symbols)/sizeof(char);
+    int len = sizeof(symbols)/sizeof(char*);
+    
+    int flag=1;
 
     for(int i=0;i<len;i++)
     {
-        if(*(w->head) == symbols[i])
+
+        
+        int symlen= strlen(symbols[i]);
+
+        if(symlen!=w->length)
+            continue;
+        
+
+
+        for(int j=0; j< w->length ; j++)
         {
-            return 1;
+            if (w->head[j]!=symbols[i][j]) 
+            {
+                flag=0;
+                break;
+            }
         }
+        if(flag)
+            return 1;
+        flag=1;
     }
     return 0;
 }
@@ -172,11 +189,17 @@ int
 is_identifier(struct word * w)
 {
     struct word temp = *w;
+    
+    if(w->head[0] - '0' >=0 && w->head[0]-'0' <=9)
+        return 0;
 
     temp.length =1;
+
+
     for(int i=0; i < w->length; i++)
     {
         temp.head++;
+
         if(is_symbol(&temp))
             return 0;
 
@@ -189,7 +212,11 @@ int
 is_lvalue(struct word * w)
 {
     int val=1;
+
+    int comma=0;
+
     if(w->head[0]=='0')
+
     {
         if(w->length!=1)
         {
@@ -200,15 +227,24 @@ is_lvalue(struct word * w)
     }
     for(int i=0 ; i< w->length;i++)
     {
+        
+        if(w->head[i] == ',' && i!=0 && comma==0)
+        {
+            comma=1;
+            continue;
+        }
         if(!(w->head[i] - '0' >= 0 && w->head[i] - '0' <=9))
         {
             val=0;
+
             break;
         }
     }
     
+    //char support for later
+
     chr:
 
-
+    
     return val;
 }
