@@ -1,6 +1,7 @@
 #ifndef BUF_H
 #define BUF_H
-#include "token.h"
+
+#include "main.h"
 
 char *
 read_file(char * fname);

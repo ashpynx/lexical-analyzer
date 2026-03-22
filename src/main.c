@@ -1,12 +1,16 @@
 #include <stdio.h>
-#include "token.h"
+#include "main.h"
+#include "trie.h"
 #include "buffer.h"
+#include "token.h"
 
 int 
+
 main(int argc
     ,char * argv[])
 {
     
+    Trie * obj = initTrie();
 
     char * buffer;
     
@@ -27,7 +31,7 @@ main(int argc
     Token temp;
     while(1)
     {
-        temp = next_token(lex);
+        temp = next_token(obj,lex);
 
         if(lex->state == __EOF)
         {
@@ -41,21 +45,19 @@ main(int argc
         Token temp1=tokarr->arr[i]; 
         if(temp1.type ==__KEYWORD)
         {
-            printf("Keyword found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
+            printf("\e[38;2;200;50;50mKeyword\e[0m found at line %d , position %d:\e[38;2;200;50;50m%.*s\e[0m\n",temp1.line,temp1.position,temp1.length,temp1.head);
         }else if (temp1.type == __SYMBOL)
         {
-            printf("Symbol found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
+            printf("\e[38;2;255;155;100mSymbol\e[0m found at line %d , position %d:\e[38;2;255;155;100m%.*s\e[0m\n",temp1.line,temp1.position,temp1.length,temp1.head);
         }
         else if(temp1.type == __LVALUE)
         {
-
-            printf("Value found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
-
+            printf("\e[38;2;0;255;0mValue\e[0m found at line %d , position %d:\e[38;2;0;255;0m%.*s\e[0m\n",temp1.line,temp1.position,temp1.length,temp1.head);
         }
         else if (temp1.type == __ID)
         {
 
-            printf("Identifier found at line %d , position %d:%.*s\n",temp1.line,temp1.position,temp1.length,temp1.head);
+            printf("\e[38;2;10;200;210mIdentifier\e[0m found at line %d , position %d:\e[38;2;10;200;210m%.*s\e[0m\n",temp1.line,temp1.position,temp1.length,temp1.head);
         }
         else 
         {
@@ -66,5 +68,7 @@ main(int argc
     free(lex);
     free(tokarr->arr);
     free(tokarr);
-    return 0;
-}
+   free(obj);
+   
+   return 0;
+}   
