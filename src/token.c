@@ -4,7 +4,7 @@
 #include "trie.h"
 
 
-
+//init main module
 Lexer * 
 init_lexer(char * source)
 {
@@ -15,9 +15,12 @@ init_lexer(char * source)
     newLexer->curr = source;
     newLexer->line=0;
     newLexer->position=0;
-
+    newLexer->state=__Available;
     return newLexer;
 }
+
+
+//dynamic array push
 
 TokenArray* 
 push_token(TokenArray* array,Token tok)
@@ -42,6 +45,8 @@ push_token(TokenArray* array,Token tok)
 }
 
 
+
+//Black Magic, dont bother reading
 Token
 next_token( Trie * trie,Lexer * lex)
 {
@@ -115,7 +120,7 @@ next_token( Trie * trie,Lexer * lex)
     lex->curr+=nw.length-1;
     lex->position+=nw.length-1;
     nw.head+=nw.length-1;
-    nw.length=0; 
+    nw.length=1; 
 
     //
     //
@@ -142,12 +147,12 @@ next_token( Trie * trie,Lexer * lex)
         int val=is_keyword(trie,&((struct word){.head=nw.head,.length=nw.length-1}));
         if(val)
         {
-            return (Token){.type = __KEYWORD,.val=val,.head=nw.head,.length=nw.length-1,.position=lex->position,.line = lex->line};
+            return (Token){.type = __KEYWORD,.val=val,.head=nw.head,.length=nw.length-1,.position=lex->position-nw.length+1,.line = lex->line};
 
         }
         else 
         {
-            return (Token){.type=__ID,.val=0,.head=nw.head,.length=nw.length-1,.position=lex->position,.line=lex->line};
+            return (Token){.type=__ID,.val=0,.head=nw.head,.length=nw.length-1,.position=lex->position-nw.length+1,.line=lex->line};
         }
 
     }
@@ -185,10 +190,10 @@ next_token( Trie * trie,Lexer * lex)
             }
             lex->position+= nw.length;
             lex->curr+=nw.length;  
-            return (Token){.type = __LVALUE , .val =__VALSTRING,.head=nw.head,.length=nw.length,.position=lex->position,.line=lex->line};   
+            return (Token){.type = __LVALUE , .val =__VALSTRING,.head=nw.head,.length=nw.length,.position=lex->position-nw.length+1,.line=lex->line};   
 
         }
-        while (curr!='\0' && (isdigit(curr) || curr ==','))
+        while (curr!='\0' && (isdigit(curr) || curr =='.'))
         {
             curr = nw.head[nw.length++]; 
         }
@@ -205,11 +210,11 @@ next_token( Trie * trie,Lexer * lex)
         
         if(val)
         {
-            return (Token){.type=__LVALUE,.val=val,.head=nw.head,.length=nw.length-1,.position=lex->position,.line=lex->line};
+            return (Token){.type=__LVALUE,.val=val,.head=nw.head,.length=nw.length-1,.position=lex->position-nw.length+1,.line=lex->line};
         }
         else 
         {
-            return (Token){.type=__UNID,.head=nw.head,.length=nw.length-1,.position=lex->position,.line=lex->line};
+            return (Token){.type=__UNID,.head=nw.head,.length=nw.length-1,.position=lex->position-nw.length+1,.line=lex->line};
         }
 
     }
@@ -228,7 +233,7 @@ next_token( Trie * trie,Lexer * lex)
         int val=0;
         int len=0;
         int bestlen=0;
-        while(curr!='\0' && !((curr ==' ' || curr=='\n' || curr=='\t') || ((curr >='a' &&curr<='z' )||(curr>='A' && curr <='Z') || curr=='_') || ((curr>='0' && curr <='9') || curr ==',' || curr=='\'' || curr == '"')))
+        while(curr!='\0' && !((curr ==' ' || curr=='\n' || curr=='\t') || ((curr >='a' &&curr<='z' )||(curr>='A' && curr <='Z') || curr=='_') || ((curr>='0' && curr <='9')|| curr=='\'' || curr == '"')))
         {
                 
 
@@ -254,14 +259,14 @@ next_token( Trie * trie,Lexer * lex)
             lex->position+=bestlen;
             lex->curr+=bestlen;
 
-            return (Token){.type = __SYMBOL,.val=val,.head=nw.head,.length=bestlen,.position=lex->position,.line=lex->line};
+            return (Token){.type = __SYMBOL,.val=val,.head=nw.head,.length=bestlen,.position=lex->position-nw.length+1,.line=lex->line};
             
         }
         else 
         {
             lex->position++;
             lex->curr++;
-            return (Token){.type=__UNID,.head=nw.head,.length=1,.line=lex->line,.position=lex->position};
+            return (Token){.type=__UNID,.head=nw.head,.length=1,.line=lex->line,.position=lex->position-nw.length+1};
         }
     }
 
@@ -437,7 +442,7 @@ is_lvalue(struct word * w)
     for(int i=0 ; i< w->length;i++)
     {
         
-        if(w->head[i] == ',' && i!=0 && comma==0)
+        if(w->head[i] == '.' && i!=0 && comma==0)
         {
             comma=1;
             continue;

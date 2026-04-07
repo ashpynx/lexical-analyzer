@@ -4,6 +4,8 @@
 
 #include "buffer.h"
 
+
+//put file into a string
 char * 
 read_file(char * filename)
 {
@@ -40,6 +42,7 @@ read_file(char * filename)
     return buffer;
 }
 
+//not used anymore,here for museum purposes
 struct word
 next_word(Lexer * lex)
 
@@ -70,3 +73,39 @@ next_word(Lexer * lex)
     return (struct word){buf+i,len};
 }
 
+void 
+print_help()
+{
+    printf("\n\nlexical analyser\n\nUsage:\n\n");
+    printf("./lex -i [source file] [files] : analyses [files] according to [source file]\n\n");
+    printf("-i [source file] : indicates the source file for the lexer\n\n"); 
+
+}
+
+//for source file
+struct word
+get_word(char * root)
+{
+    int total=0;
+    while(root[0]!='\0' && isspace(root[0]))
+    {
+        root++;
+        total++;
+    }
+    int j=0;
+    while(root[j]!='\0' && !isspace(root[j]))
+    {
+        j++;
+    }
+    if(j==0)
+        return (struct word){NULL,0};
+    
+    char * buf = malloc(j+1);
+
+    memcpy(buf,root,j);
+    buf[j]='\0';
+
+    
+    return (struct word){.head = buf,.length=total+j};
+
+}

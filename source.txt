@@ -1,0 +1,36 @@
+#   This is a default source file and it contains same tokens as the defaults of the lexer.
+#   #'s are comments,
+#   you can do %s %s %d on each line,
+#   %s->token's string %s-> token type's string(keyword or symbol) %d->token's value(optional) 
+#   if %d is not given, the lexer will automatically assign a value
+#
+
+#keywords
+if keyword 
+int keyword
+float keyword
+string keyword
+while keyword
+function keyword
+end keyword
+
+#symbols
+, symbol
+-- symbol
+++ symbol
++ symbol
+; symbol
+- symbol
+!= symbol
+== symbol
+= symbol
+> symbol
+< symbol
+/ symbol 
+* symbol
+( symbol
+) symbol
+[ symbol
+] symbol
+{ symbol
+} symbol

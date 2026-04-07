@@ -39,6 +39,7 @@ typedef enum
     __MULT,
     __LPARAN,
     __RPARAN,
+    __COMMA,
     __LCLOSED,
     __RCLOSED,
     __LCURLY,
@@ -56,7 +57,7 @@ typedef enum
 
 struct word 
 {
-    const char * head;
+    char * head;
     int length;
 };
 

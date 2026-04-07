@@ -7,7 +7,7 @@ struct TrieNode * createNode();
 
 int freeTrie(TrieNode * trie);
 
-Trie * initTrie();
+Trie * initTrie(int fallback);
 
 int insertTrie(Trie * trie,char * str,TokenType type,unsigned char val);
 

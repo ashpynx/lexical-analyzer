@@ -2,7 +2,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wall --std=c11
 
-SRC= $(wildcard src/*.c)
+SRC= $(wildcard src/*.c src/*.h)
 
 OUT= lex
 
