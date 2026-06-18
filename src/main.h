@@ -7,7 +7,13 @@
 
 #include <string.h>
 
+#include <signal.h>
+
+#include <stdatomic.h>
+
 #include <ctype.h>
+
+extern atomic_int sigint;
 
 typedef enum 
 {
@@ -39,7 +45,6 @@ typedef enum
     __MULT,
     __LPARAN,
     __RPARAN,
-    __COMMA,
     __LCLOSED,
     __RCLOSED,
     __LCURLY,
@@ -88,13 +93,15 @@ typedef struct
 
     unsigned char val;
 
-    const char * head;
-    
-    int length;
-
     int position;
     
     int line;
+
+    int length;
+
+    const char * head;
+
+   
 
 
 }Token;

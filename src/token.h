@@ -28,4 +28,9 @@ is_identifier(struct word * w);
 int 
 is_lvalue(struct word * w);
 
+void 
+print_token(FILE * fptr,Token * tok );
+
+
+
 #endif

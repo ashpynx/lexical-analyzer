@@ -11,7 +11,7 @@ parse_inputfile(char * source,Trie * obj)
     char c =0;
     //find the first line where no blank line or # at start,copy the line into a buffer,
     //read the buffer and look for 3 words, if more, ignore.
-    //such as
+    //suc as
         
     /*
 
@@ -32,21 +32,21 @@ parse_inputfile(char * source,Trie * obj)
     int topval=0; 
     char * linebuf[3] = { 0 };
     int skip=0; 
-    while(i < len)
+    while(i < len && !sigint)
     {
         c = source[i];
         
         int oldpos=i>0?i-1:i;
         if(c=='#')
         {
-            while (c!='\n')
+            while (c!='\n' && c!='\0')
             {
                 c=source[i++];
             }
             continue;
         }
         //get line
-        while(c!='\n')
+        while(c!='\n' && c!='\0')
         {
             c = source[i++];
         }
@@ -55,13 +55,12 @@ parse_inputfile(char * source,Trie * obj)
         
         //read as many words(3>=x>1) as possible
         //getword function,
-        Token temp= { 0 };
-        int len=0;
+        int llen=0;
         for(int j = 0 ; j < 3;j++)
         {
             
-            struct word curr = get_word(buffer+len);
-            len += curr.length;
+            struct word curr = get_word(buffer+llen);
+            llen += curr.length;
             linebuf[j]=curr.head;
             if(linebuf[j]==NULL)
             {
@@ -148,6 +147,7 @@ parse_inputfile(char * source,Trie * obj)
             if(linebuf[t]!=NULL)
             {
                 free(linebuf[t]);
+
                 linebuf[t]=NULL;
             }
         //
@@ -156,8 +156,15 @@ parse_inputfile(char * source,Trie * obj)
         i++;
         skip=0;
     }
+    for(int t = 0;t<3;t++)
+    {
+        if(linebuf[t]!=NULL)
+        {
+            free(linebuf[t]);
 
-
+            linebuf[t]=NULL;
+        }
+    }
     return 1;
 
 }

@@ -11,7 +11,8 @@
 #include "trie.h"
 
 
-int parse_inputfile(char * source,Trie * obj);
+int 
+parse_inputfile(char * source,Trie * obj);
 
 
 

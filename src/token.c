@@ -4,7 +4,7 @@
 #include "trie.h"
 
 
-//init main module
+
 Lexer * 
 init_lexer(char * source)
 {
@@ -18,9 +18,6 @@ init_lexer(char * source)
     newLexer->state=__Available;
     return newLexer;
 }
-
-
-//dynamic array push
 
 TokenArray* 
 push_token(TokenArray* array,Token tok)
@@ -45,8 +42,6 @@ push_token(TokenArray* array,Token tok)
 }
 
 
-
-//Black Magic, dont bother reading
 Token
 next_token( Trie * trie,Lexer * lex)
 {
@@ -93,6 +88,9 @@ next_token( Trie * trie,Lexer * lex)
      *
      *
      * */
+
+    //the comment section above is not up to date procedure looks similar but not they are not same 
+
 
     struct word nw = {.head = lex->curr,.length=0}; 
     TrieNode * node = trie->head;
@@ -165,7 +163,7 @@ next_token( Trie * trie,Lexer * lex)
     //
     //
 
-    else if((curr>='0' && (curr <='9') || curr=='\'' || curr=='"'))
+    else if(((curr>='0' && (curr <='9')) || curr=='\'' || curr=='"'))
     {
         if(curr =='\'' || curr =='"')
         {
@@ -193,7 +191,7 @@ next_token( Trie * trie,Lexer * lex)
             return (Token){.type = __LVALUE , .val =__VALSTRING,.head=nw.head,.length=nw.length,.position=lex->position-nw.length+1,.line=lex->line};   
 
         }
-        while (curr!='\0' && (isdigit(curr) || curr =='.'))
+        while (curr!='\0' && (isdigit(curr) || curr ==','))
         {
             curr = nw.head[nw.length++]; 
         }
@@ -233,14 +231,14 @@ next_token( Trie * trie,Lexer * lex)
         int val=0;
         int len=0;
         int bestlen=0;
-        while(curr!='\0' && !((curr ==' ' || curr=='\n' || curr=='\t') || ((curr >='a' &&curr<='z' )||(curr>='A' && curr <='Z') || curr=='_') || ((curr>='0' && curr <='9')|| curr=='\'' || curr == '"')))
+        while(curr!='\0' && !((curr ==' ' || curr=='\n' || curr=='\t') || ((curr >='a' &&curr<='z' )||(curr>='A' && curr <='Z') || curr=='_') || ((curr>='0' && curr <='9') || curr ==',' || curr=='\'' || curr == '"')))
         {
                 
 
-            if(node->nodes[curr]==NULL)
+            if(node->nodes[(int)curr]==NULL)
                 break;
 
-            node =node->nodes[curr];
+            node =node->nodes[(int)curr];
             len++;
 
             if(node->val!=0)
@@ -273,92 +271,9 @@ next_token( Trie * trie,Lexer * lex)
 
     return (Token){};
 
-
-
-
-
-
-
-    /*int back=0;
-        int lastval=0;
-
-        while(curr!='\0' && !((curr ==' ' || curr=='\n' || curr=='\t') || ((curr >='a' &&curr<='z' )||(curr>='A' && curr <='Z') || curr=='_') || ((curr>='0' && curr <='9') || curr ==',' || curr=='\'' || curr == '"')))
-        {
-            back++;
-            if((is_symbol(trie,&(struct word){.head = nw.head,.length=nw.length-1})))
-                    {
-                        back=0;
-                    }
-            curr = nw.head[nw.length++];
-        }
-
-    
-        if(curr=='\0')
-        {   
-            lex->state = __EOF;
-        }
-
-        lex->position+=nw.length-1 ;
-        lex->curr+=nw.length-1;
-        int val = is_symbol(trie,&((struct word){.head=nw.head,.length=nw.length-1}));
-        if(val)
-        {
-            return (Token){.type=__SYMBOL,.val=lastval,.head=nw.head,.length=nw.length-1,.position=lex->position,.line=lex->line};
-        }
-        else
-        {
-            return (Token){.type=__UNID,.head=nw.head,.length=nw.length-1,.position=lex->position,.line=lex->line};
-        }
-        */
-       /*
-        *
-        *
-    if(is_keyword(&nw))
-    {
-        temp.head = nw.head ;
-        temp.length = nw.length;
-        temp.type = __KEYWORD;
-        temp.line = lex->line;
-        temp.position = lex->position - temp.length;
-
-    }
-    else if(is_symbol(&nw))
-    {
-        temp.head = nw.head ;
-        temp.length = nw.length;
-        temp.type = __SYMBOL;
-        temp.line = lex->line;
-        temp.position = lex->position - 1;
-    }
-    else if(is_lvalue(&nw))
-    {
-        temp.head = nw.head;
-    temp.length=nw.length;
-        temp.type=__LVALUE;
-        temp.line=lex->line;
-        temp.position = lex->position - temp.length;
-
-    }
-    else if(is_identifier(&nw))
-    {
-        temp.head = nw.head;
-        temp.length = nw.length;
-        temp.type = __ID;
-        temp.line = lex->line;
-        temp.position = lex->position-nw.length;
-    }
-    else 
-    {
-
-        temp.length =nw.length;
-        temp.head = nw.head;
-        temp.line =lex->line;
-        temp.position = lex->position - nw.length;
-        temp.type = __UNID;
-
-    }
-    */
 }
+
+
 
 int
 is_keyword(Trie * trie,struct word *w)
@@ -366,9 +281,9 @@ is_keyword(Trie * trie,struct word *w)
     TrieNode * curr = trie->head;
     for(int i=0 ; i  < w->length;i++)
     {
-        if(curr->nodes[w->head[i]]==NULL)
+        if(curr->nodes[(int)(w->head[i])]==NULL)
             return 0;
-        curr = curr->nodes[w->head[i]];
+        curr = curr->nodes[(int)(w->head[i])];
     }
 
 
@@ -389,25 +304,28 @@ init_tokenarray()
     return temp;
 }
 
+//redacted
+
 int
 is_symbol(Trie * trie,struct word *w)
 {
     TrieNode * curr = trie->head;
     for(int i=0; i< w->length;i++)
     {
-        if(curr->nodes[w->head[i]]==NULL)
+        if(curr->nodes[(int)(w->head[i])]==NULL)
             return 0;
-        curr = curr->nodes[w->head[i]];
+        curr = curr->nodes[(int)(w->head[i])];
 
     }
 
     return curr->type==__SYMBOL ? curr->val:0;
 }
 
+//redacted
+
 int 
 is_identifier(struct word * w)
 {
-    struct word temp = *w;
     
     if(w->head[0] - '0' >=0 && w->head[0]-'0' <=9)
         return 0;
@@ -442,7 +360,7 @@ is_lvalue(struct word * w)
     for(int i=0 ; i< w->length;i++)
     {
         
-        if(w->head[i] == '.' && i!=0 && comma==0)
+        if(w->head[i] == ',' && i!=0 && comma==0)
         {
             comma=1;
             continue;
@@ -454,11 +372,36 @@ is_lvalue(struct word * w)
             break;
         }
     }
-    
-    //char support for later
 
     chr:
 
     
     return val;
+}
+
+void
+print_token(FILE * fptr,Token * token)
+{
+
+    if(token->type ==__KEYWORD)
+    {
+        fprintf(fptr,"\e[38;2;200;50;50mKeyword\e[0m found at line %d , position %d:\e[38;2;200;50;50m%.*s\e[0m\n",token->line,token->position,token->length,token->head);
+    }else if (token->type == __SYMBOL)
+    {
+        fprintf(fptr,"\e[38;2;255;155;100mSymbol\e[0m found at line %d , position %d:\e[38;2;255;155;100m%.*s\e[0m\n",token->line,token->position,token->length,token->head);
+    }
+    else if(token->type == __LVALUE)
+    {
+        fprintf(fptr,"\e[38;2;0;255;0mValue\e[0m found at line %d , position %d:\e[38;2;0;255;0m%.*s\e[0m\n",token->line,token->position,token->length,token->head);
+    }
+    else if (token->type == __ID)
+    {
+
+        fprintf(fptr,"\e[38;2;10;200;210mIdentifier\e[0m found at line %d , position %d:\e[38;2;10;200;210m%.*s\e[0m\n",token->line,token->position,token->length,token->head);
+    }
+    else 
+    {
+        fprintf(fptr,"Unidentifiable token found at line %d , position %d:%.*s\n",token->line,token->position,token->length,token->head);
+    }
+
 }

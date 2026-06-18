@@ -4,8 +4,6 @@
 
 #include "buffer.h"
 
-
-//put file into a string
 char * 
 read_file(char * filename)
 {
@@ -30,19 +28,24 @@ read_file(char * filename)
         exit(74);
     }
 
+    int j=0;
+
     for(int i=0;i<size+1;i++)
     {
-        buffer[i] = fgetc(file);
+        char c = fgetc(file);
+        if(c==EOF) break;
+        if(c=='\r')
+            continue;
+        buffer[j++] = c;
     }
 
-    buffer[size] = '\0';
+    buffer[j] = '\0';
 
     fclose(file);
 
     return buffer;
 }
 
-//not used anymore,here for museum purposes
 struct word
 next_word(Lexer * lex)
 
@@ -70,19 +73,18 @@ next_word(Lexer * lex)
      
     lex->curr = lex->curr + i +len;
     lex->position += i-negi+len; 
-    return (struct word){buf+i,len};
+    return (struct word){(char *)(buf+i),len};
 }
 
 void 
 print_help()
 {
-    printf("\n\nlexical analyser\n\nUsage:\n\n");
+    printf("\nlexical analyser\n\nUsage:\n\n");
     printf("./lex -i [source file] [files] : analyses [files] according to [source file]\n\n");
     printf("-i [source file] : indicates the source file for the lexer\n\n"); 
 
 }
 
-//for source file
 struct word
 get_word(char * root)
 {

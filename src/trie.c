@@ -18,7 +18,9 @@ initTrie(int fallback)
     temp->size =0;
 
     temp ->head = createNode();
-    //if no -i, add defaults
+    
+    //fallback flag is for determining if -i flag was used
+
     if(fallback)
     {
         insertTrie(temp,"if",__KEYWORD,__IF);
@@ -45,7 +47,6 @@ initTrie(int fallback)
         insertTrie(temp,")",__SYMBOL,__RPARAN);
         insertTrie(temp,"[",__SYMBOL,__LCLOSED);
         insertTrie(temp,"]",__SYMBOL,__RCLOSED);
-        insertTrie(temp,",",__SYMBOL,__COMMA);
         insertTrie(temp,"{",__SYMBOL,__LCURLY);
         insertTrie(temp,"}",__SYMBOL,__RCURLY);
 
@@ -66,6 +67,7 @@ createNode()
         exit(74);
     }
     
+    *temp = (TrieNode){0};
 
     temp->type= __NONE;
     temp->val=0; 
@@ -73,7 +75,6 @@ createNode()
 
 }
 
-//insert word into trie
 int 
 insertTrie(Trie * trie,char * str, TokenType type,unsigned char val)
 {
@@ -111,12 +112,12 @@ getType(Trie * trie,char * str)
 
     for(int i=0; i< len ; i ++)
     {
-        if(curr->nodes[str[i] ] == NULL)
+        if(curr->nodes[(int)str[i] ] == NULL)
         {
             return -1;
         }
         
-            curr = curr->nodes[str[i]];
+            curr = curr->nodes[(int)str[i]];
     }
     
 
@@ -134,12 +135,12 @@ findTrie(Trie * trie,char * str)
 
     for(int i=0; i< len ; i ++)
     {
-        if(curr->nodes[str[i] ] == NULL)
+        if(curr->nodes[(int)str[i] ] == NULL)
         {
             return 0;
         }
         
-            curr = curr->nodes[str[i]];
+            curr = curr->nodes[(int)str[i]];
     }
     
     if(curr->type != __NONE)
@@ -168,7 +169,7 @@ int
 freeTrie(TrieNode* node)
 {
     
-    for(int i=0 ; i < 26;i++)
+    for(int i=0 ; i < 128;i++)
     {
         if(node->nodes[i]!=NULL)
         {

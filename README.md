@@ -6,14 +6,23 @@ _Defaults:_
 
 keywords :  {"if","int","float","string","while","function","end"};
 
-symbols  :  {" +" , "++" , "-" , "--" , "\*" , "/" , "!=" , "==" , "=" , ">" , "<" , "," , "(" , ")" , "\[" , "\] " , "\{" , "\}" };
+symbols  :  {"+","++","-","--","\*","/","!=","==","=",">","<","","*","(",")","\[","\]","\{","\}"};
 
-the program also supports lvalues (ints,strings and floats) and identifiers (no symbols and no numbers as first character).
+the program also supports lvalues (ints,strings and floats) and identifiers (no symbols and no numbers as first character).After running the program it asks if the user wants to save the output, if prompted yes, the user can choose between binary(.bin) and text(.txt) file as output format.
 
 # Usage
 
-Compile the program with **make** and input any file you want, it will output the tokens into stdout.
-currently only supports stdout so no support for saving into file for now.
+Compile the program with **make**.
+
+./lex -i [source] [files]
+./lex [files]
+
+-i flags lets you choose a source file for the lexer to read with respect to.Without -i flag it uses its defaults.
+
+./reader [file]
+
+File must be a binary file that was outputted via the lexer.Simply reads the file and outputs it as human readable text into stdout.
+
 
 # Example Input & Output
 with the file **test**
@@ -34,13 +43,11 @@ with the file **test**
 
 }
 
-the output  of **.lex test**
+the output  of **./lex test**
 {
 
     -i option not found.fallback to defaults.-h for more info. 
-     
-     
-     
+    
     File: test 
      
     Keyword found at line 0 , position 0:function 
@@ -99,7 +106,7 @@ File:source.txt
     end keyword
     
     #symbols
-    , symbol
+    
     -- symbol
     ++ symbol
     + symbol
@@ -110,7 +117,7 @@ File:source.txt
     = symbol
     > symbol
     < symbol
-    / symbol
+    / symbol 20 
     * symbol
     ( symbol
     ) symbol
@@ -124,7 +131,7 @@ if run as **.lex -i source.txt test**
 
 {
 
-    File: test 
+     File: test 
      
     Keyword found at line 0 , position 0:function 
     Identifier found at line 0 , position 9:main 

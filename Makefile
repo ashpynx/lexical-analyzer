@@ -1,14 +1,33 @@
 CC = gcc 
+CFLAGS = -Wall --std=c11 
 
-CFLAGS = -Wall -Wall --std=c11
 
-SRC= $(wildcard src/*.c src/*.h)
+ifeq ($(OS),Windows_NT)
+		
+		EXT = .exe
+		RM = del /Q /F
+else
 
-OUT= lex
+		EXT = 
+		RM = rm -rf
 
-$(OUT) : $(SRC)
-	$(CC) $(CFLAGS) -o $(OUT) $(SRC)
-	
+
+endif
+
+
+ALLSRC= $(wildcard src/*.c)
+HEADERS = $(wildcard src/*.h)
+
+
+SRC = $(filter-out src/reader.c,$(ALLSRC))
+
+all: lex$(EXT) reader$(EXT)
+
+lex$(EXT) : $(SRC) $(HEADERS)
+	$(CC) $(CFLAGS) -o lex$(EXT) $(SRC)
+
+reader$(EXT) : $(SRC) $(HEADERS)
+	$(CC) $(CFLAGS) -o reader$(EXT) src/reader.c src/token.c src/file.c 
 
 clean :
-	rm -rf $(OUT)
+	$(RM) lex$(EXT) reader$(EXT)

@@ -3,17 +3,24 @@
 
 #include "main.h"
 
-struct TrieNode * createNode();
+struct TrieNode *
+createNode();
 
-int freeTrie(TrieNode * trie);
+int 
+freeTrie(TrieNode * trie);
 
-Trie * initTrie(int fallback);
+Trie * 
+initTrie(int fallback);
 
-int insertTrie(Trie * trie,char * str,TokenType type,unsigned char val);
+int 
+insertTrie(Trie * trie,char * str,TokenType type,unsigned char val);
 
-TokenType getType(Trie * trie,char * str);
+TokenType 
+getType(Trie * trie,char * str);
 
-int findTrie(Trie *trie,char * str);
+int 
+findTrie(Trie *trie,char * str);
 
-int isAlpha(char * str);
+int 
+isAlpha(char * str);
 #endif
